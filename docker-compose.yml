@@ -4,8 +4,6 @@ services:
   app:
     container_name: app
     image: app_image
-    env_file:
-      - .env
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,7 +12,8 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - app_db
+      app_db:
+        condition: service_healthy
 
   app_db:
     container_name: app_db
@@ -28,6 +27,11 @@ services:
       - app_pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "app"]
+      interval: 1s
+      timeout: 1s
+      retries: 5
 
 volumes:
   app_pg_data:

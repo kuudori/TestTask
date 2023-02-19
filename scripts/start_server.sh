@@ -9,6 +9,7 @@ export APP_MODULE=${APP_MODULE:-"$MODULE_NAME:$VARIABLE_NAME"}
 
 HOST=${HOST:-0.0.0.0}
 PORT=${PORT:-8000}
+cp _CI/envs/env.env .env
 
 echo "Checking if Alembic has changes to make..."
 if alembic check | grep -q 'New upgrade operations detected'
